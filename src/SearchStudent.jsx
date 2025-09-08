@@ -88,7 +88,7 @@ function SearchStudent() {
           onClick={() => (window.location.href = "/admin")}
           className="w-full mt-6 bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 transition"
         >
-          ➕ Go to Admin Panel
+        <Link to="/admin">➕ Go to Admin Panel</Link>
         </button>
       </div>
     </div>

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+
 
 function AdminPanel() {
   const [form, setForm] = useState({
@@ -138,10 +140,9 @@ function AdminPanel() {
             ➕ Add Student
           </button>
           <button
-          onClick={() => (window.location.href = "/")}
           className="w-full mt-6 bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 transition"
         >
-          ➕ Go to Student Panel
+         <Link to="/">➕ Go to Student Panel</Link> 
         </button>
         </form>
 
