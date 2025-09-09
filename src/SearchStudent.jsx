@@ -23,7 +23,7 @@ function SearchStudent() {
     setResult(null);
 
     try {
-      const res = await axios.post("https://student-management-backend-nine.vercel.app/api/search", formData);
+      const res = await axios.post("https://student-management-backend-nine.vercel.app/search", formData);
       setResult(res.data);
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
