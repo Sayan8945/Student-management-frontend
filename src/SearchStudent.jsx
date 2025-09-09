@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 function SearchStudent() {
   const [formData, setFormData] = useState({
     name: "",
-    studentClass: "",
+    className: "",
     rollNumber: "",
   });
 
@@ -46,16 +46,16 @@ function SearchStudent() {
             required
           />
           <input
-            type="text"
-            name="studentClass"
+            type="number"
+            name="className"
             placeholder="Enter Class"
-            value={formData.studentClass}
+            value={formData.className}
             onChange={handleChange}
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
             required
           />
           <input
-            type="text"
+            type="number"
             name="rollNumber"
             placeholder="Enter Roll Number"
             value={formData.rollNumber}
@@ -77,7 +77,7 @@ function SearchStudent() {
           <div className="mt-6 bg-gray-100 p-4 rounded-lg">
             <h2 className="font-bold text-lg">📜 Marksheet</h2>
             <p><strong>Name:</strong> {result.name}</p>
-            <p><strong>Class:</strong> {result.class}</p>
+            <p><strong>Class:</strong> {result.className}</p>
             <p><strong>Roll No:</strong> {result.rollNumber}</p>
             <p><strong>Math:</strong> {result.marks?.math}</p>
             <p><strong>Science:</strong> {result.marks?.science}</p>
