@@ -64,7 +64,7 @@ const Signup = () => {
     if (Object.keys(validationErrors).length === 0) {
       setLoading(true);
       try {
-        const res = await fetch(`${process.env.BACKEND_API}/signup`, {
+        const res = await fetch('https://student-management-backend-nine.vercel.app/signup', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 // Create context
 const AuthContext = createContext(null);
 
-// 🔹 Loading Spinner Component
+// Loading Spinner Component
 const LoadingScreen = () => (
   <div className="flex items-center justify-center min-h-screen bg-gray-50">
     <div className="w-12 h-12 border-4 border-[#7f56da] border-t-transparent rounded-full animate-spin"></div>
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch(`${process.env.BACKEND_API}/profile`, {
+        const res = await fetch("https://student-management-backend-nine.vercel.app/profile", {
           method: "GET",
           credentials: "include",
         });
@@ -44,8 +44,8 @@ export const AuthProvider = ({ children }) => {
   const login = async (role, credentials) => {
     const endpoint =
       role === "student"
-        ? `${process.env.BACKEND_API}/login/student`
-        : `${process.env.BACKEND_API}/login/teacher`;
+        ? `https://student-management-backend-nine.vercel.app/login/student`
+        : `https://student-management-backend-nine.vercel.app/login/teacher`;
 
     try {
       const res = await fetch(endpoint, {
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
   // Logout
   const logout = async () => {
     try {
-      await fetch(`${process.env.BACKEND_API}/logout`, {
+      await fetch(`https://student-management-backend-nine.vercel.app/logout`, {
         method: "POST",
         credentials: "include",
       });
