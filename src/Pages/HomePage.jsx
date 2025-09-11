@@ -19,15 +19,12 @@ const Homepage = () => {
         <div className="flex flex-col justify-center p-6">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 leading-snug">
             Welcome to <br />
-            School Management <br />
+            College Management <br />
             System
           </h1>
 
           <p className="mt-6 mb-6 text-gray-600 leading-relaxed">
-            Streamline school management, class organization, and add students
-            and faculty. Seamlessly track attendance, assess performance, and
-            provide feedback. Access records, view marks, and communicate
-            effortlessly.
+            Streamline college students' marksheets, teachers' portal Management
           </p>
 
           <div className="flex flex-col items-center gap-4">
