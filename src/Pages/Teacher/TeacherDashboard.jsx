@@ -1,14 +1,19 @@
-import React from "react";
+import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FaUserTie } from "react-icons/fa6";
 import { IoLogInOutline } from "react-icons/io5";
-
-
+import { Upload, Loader2 } from "lucide-react";
 
 const TeacherDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    year: "",
+    dept: "",
+    roll: "",
+  });
 
   if (!user || !user.teacher) {
     return (
@@ -22,9 +27,47 @@ const TeacherDashboard = () => {
 
   const { name, gmail, teacherId } = user.teacher;
 
+  const [file, setFile] = useState(null);
+  const [uploadMsg, setUploadMsg] = useState("");
+  const [uploading, setUploading] = useState(false);
+
   const handleLogout = async () => {
-    await logout(); // clear session
-    navigate("/login"); // redirect
+    await logout();
+    navigate("/login");
+  };
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    setUploadMsg("");
+    setUploading(true);
+
+    const fd = new FormData();
+    fd.append("year", formData.year);
+    fd.append("dept", formData.dept);
+    fd.append("roll", formData.roll);
+    fd.append("marksheet", file);
+
+    try {
+      const res = await fetch("https://student-management-backend-nine.vercel.app/upload-marksheet", {
+        method: "POST",
+        body: fd,
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setUploadMsg(data.message || "✅ Marksheet uploaded successfully!");
+        console.log("File URL:", data.url);
+      } else {
+        setUploadMsg(data.error || "❌ Upload failed");
+      }
+    } catch (err) {
+      console.error(err);
+      setUploadMsg("❌ Server error");
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -66,15 +109,80 @@ const TeacherDashboard = () => {
               {teacherId}
             </p>
           </div>
-
-          {/* Manage Students Button */}
-          <button
-            className="mt-8 w-full font-medium py-2 px-4 rounded-lg transition transform hover:scale-105 hover:shadow-lg"
-            style={{ backgroundColor: "#7f56da", color: "white" }}
-            onClick={() => alert("Marksheet upload feature coming soon!")}
+        </div>
+        <div className="p-6">
+          <form
+            onSubmit={handleUpload}
+            className="bg-white shadow-lg rounded-xl p-6 w-full max-w-md space-y-4"
           >
-            Upload Marksheets
-          </button>
+            <select
+              className="w-full border px-3 py-2 rounded"
+              onChange={(e) =>
+                setFormData({ ...formData, year: e.target.value })
+              }
+            >
+              <option value="">Select Year</option>
+              <option value="1st">1st</option>
+              <option value="2nd">2nd</option>
+              <option value="3rd">3rd</option>
+              <option value="4th">4th</option>
+            </select>
+
+            <select
+              className="w-full border px-3 py-2 rounded"
+              onChange={(e) =>
+                setFormData({ ...formData, dept: e.target.value })
+              }
+            >
+              <option value="">Select Dept</option>
+              <option value="CSE">CSE</option>
+              <option value="ECE">ECE</option>
+              <option value="EEE">EEE</option>
+              <option value="ME">ME</option>
+              <option value="CE">CE</option>
+            </select>
+
+            <input
+              type="text"
+              placeholder="Roll Number"
+              className="w-full border px-3 py-2 rounded"
+              onChange={(e) =>
+                setFormData({ ...formData, roll: e.target.value })
+              }
+            />
+
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={(e) => setFile(e.target.files[0])}
+              className="w-full"
+            />
+            {uploadMsg && (
+              <p
+                className={`text-center mt-2 text-sm font-medium ${
+                  uploadMsg.startsWith("✅") ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {uploadMsg}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={uploading}
+              className="flex items-center justify-center gap-2 w-full py-2 rounded bg-[#7f56da] text-white hover:shadow-lg hover:scale-105 transition disabled:opacity-50"
+            >
+              {uploading ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" /> Uploading...
+                </>
+              ) : (
+                <>
+                  <Upload size={18} /> Upload Marksheet
+                </>
+              )}
+            </button>
+          </form>
         </div>
       </main>
     </div>

@@ -1,31 +1,51 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { IoLogInOutline } from "react-icons/io5";
 import { FaUserGraduate } from "react-icons/fa6";
-
+import { FileDown, FileText } from "lucide-react";
 
 const StudentDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [marksheetUrl, setMarksheetUrl] = useState(null);
+  const [msg, setMsg] = useState("");
+  const [showMarksheet, setShowMarksheet] = useState(false);
 
-//   if (!user || !user.student) {
-//     return (
-//       <div className="flex items-center justify-center min-h-screen">
-//         <p className="text-gray-600 text-lg">
-//           ❌ No student data available. Please log in.
-//         </p>
-//       </div>
-//     );
-//   }
+  if (!user || !user.student) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-600 text-lg">❌ No student data available</p>
+      </div>
+    );
+  }
 
   const { name, year, dept, roll, dob } = user.student;
 
-
   const handleLogout = async () => {
-    await logout();         // clear session
-    navigate("/login");     // redirect to login
+    await logout(); // clear session
+    navigate("/login"); // redirect to login
   };
+  // 🔹 Fetch marksheet when dashboard loads
+  useEffect(() => {
+    const fetchMarksheet = async () => {
+      try {
+        const res = await fetch("https://student-management-backend-nine.vercel.app/get-marksheet", {
+          credentials: "include",
+        });
+        const data = await res.json();
+        if (res.ok && data.url) {
+          setMarksheetUrl(data.url);
+        } else {
+          setMsg(data.error || "❌ Marksheet not uploaded yet");
+        }
+      } catch (err) {
+        console.error(err);
+        setMsg("❌ Server error");
+      }
+    };
+    fetchMarksheet();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -38,13 +58,12 @@ const StudentDashboard = () => {
           Student Dashboard
         </h1>
         <div className="flex items-center gap-4">
-
           <button
-  onClick={handleLogout}
-  className="bg-white text-[#7f56da] font-medium px-4 py-2 rounded-lg shadow hover:shadow-lg transition transform hover:scale-105 flex items-center gap-2"
->
-  Logout <IoLogInOutline className="text-lg" />
-</button>
+            onClick={handleLogout}
+            className="bg-white text-[#7f56da] font-medium px-4 py-2 rounded-lg shadow hover:shadow-lg transition transform hover:scale-105 flex items-center gap-2"
+          >
+            Logout <IoLogInOutline className="text-lg" />
+          </button>
         </div>
       </header>
 
@@ -63,7 +82,8 @@ const StudentDashboard = () => {
               <span className="font-medium text-gray-600">Year:</span> {year}
             </p>
             <p>
-              <span className="font-medium text-gray-600">Department:</span> {dept}
+              <span className="font-medium text-gray-600">Department:</span>{" "}
+              {dept}
             </p>
             <p>
               <span className="font-medium text-gray-600">Roll:</span> {roll}
@@ -74,14 +94,40 @@ const StudentDashboard = () => {
             </p>
           </div>
 
-          {/* See Marksheet Button */}
-          <button
-            className="mt-8 w-full font-medium py-2 px-4 rounded-lg transition transform hover:scale-105 hover:shadow-lg"
-            style={{ backgroundColor: "#7f56da", color: "white" }}
-            onClick={() => alert("Marksheets feature coming soon!")}
-          >
-            Download Marksheet
-          </button>
+          {/* Show Marksheet Button */}
+          {marksheetUrl ? (
+            <button
+              onClick={() => setShowMarksheet(!showMarksheet)}
+              className="mt-6 inline-flex items-center gap-2 bg-[#7f56da] text-white px-5 py-2 rounded-lg hover:scale-105 transition"
+            >
+              <FileText size={18} />
+              {showMarksheet ? "Hide Marksheet" : "Show Marksheet"}
+            </button>
+          ) : (
+            <p className="mt-6 text-gray-600">
+              {"❌ Marksheet not uploaded yet"}
+            </p>
+          )}
+
+          {/* Marksheet Viewer */}
+          {showMarksheet && marksheetUrl && (
+  <div className="mt-8 w-full">
+    <iframe
+      src={marksheetUrl}
+      title="Student Marksheet"
+      className="w-full h-[500px] border rounded-lg shadow"
+    ></iframe>
+    <a
+      href={marksheetUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-4 inline-flex items-center gap-2 bg-[#7f56da] text-white px-4 py-2 rounded-lg hover:scale-105 transition"
+    >
+      <FileDown size={18} /> Download Marksheet
+    </a>
+  </div>
+)}
+
         </div>
       </main>
     </div>
