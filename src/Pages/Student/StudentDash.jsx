@@ -19,7 +19,7 @@ const StudentDashboard = () => {
 //     );
 //   }
 
-  const { name, year, roll, dob } = user.student;
+  const { name, year, dept, roll, dob } = user.student;
 
 
   const handleLogout = async () => {
@@ -61,6 +61,9 @@ const StudentDashboard = () => {
           <div className="space-y-3 text-left">
             <p>
               <span className="font-medium text-gray-600">Year:</span> {year}
+            </p>
+            <p>
+              <span className="font-medium text-gray-600">Department:</span> {dept}
             </p>
             <p>
               <span className="font-medium text-gray-600">Roll:</span> {roll}
