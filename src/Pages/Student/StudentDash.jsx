@@ -30,7 +30,7 @@ const StudentDashboard = () => {
   useEffect(() => {
     const fetchMarksheet = async () => {
       try {
-        const res = await fetch("http://localhost:5000/get-marksheet", {
+        const res = await fetch("https://student-management-backend-nine.vercel.app/get-marksheet", {
           credentials: "include",
         });
         const data = await res.json();

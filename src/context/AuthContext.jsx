@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await fetch("http://localhost:5000/profile", {
+        const res = await fetch("https://student-management-backend-nine.vercel.app/profile", {
           method: "GET",
           credentials: "include",
         });
@@ -44,8 +44,8 @@ export const AuthProvider = ({ children }) => {
   const login = async (role, credentials) => {
     const endpoint =
       role === "student"
-        ? `http://localhost:5000/login/student`
-        : `http://localhost:5000/login/teacher`;
+        ? `https://student-management-backend-nine.vercel.app/login/student`
+        : `https://student-management-backend-nine.vercel.app/login/teacher`;
 
     try {
       const res = await fetch(endpoint, {
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
   // Logout
   const logout = async () => {
     try {
-      await fetch(`http://localhost:5000/logout`, {
+      await fetch(`https://student-management-backend-nine.vercel.app/logout`, {
         method: "POST",
         credentials: "include",
       });
