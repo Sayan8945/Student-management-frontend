@@ -38,7 +38,7 @@ const StudentDashboard = () => {
           Student Dashboard
         </h1>
         <div className="flex items-center gap-4">
-          <span className="font-medium text-white">{name}</span>
+
           <button
   onClick={handleLogout}
   className="bg-white text-[#7f56da] font-medium px-4 py-2 rounded-lg shadow hover:shadow-lg transition transform hover:scale-105 flex items-center gap-2"
