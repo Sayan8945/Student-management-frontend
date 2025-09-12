@@ -48,7 +48,7 @@ const TeacherDashboard = () => {
     fd.append("marksheet", file);
 
     try {
-      const res = await fetch("https://student-management-backend-nine.vercel.app/upload-marksheet", {
+      const res = await fetch("http://localhost:5000/upload-marksheet", {
         method: "POST",
         body: fd,
         credentials: "include",
